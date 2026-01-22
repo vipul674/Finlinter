@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Financial Code Validator</title>
+    <meta name="description"
+        content="Treat cloud cost as a code bug. Detect cost-heavy patterns in Python, JavaScript, and Java code before deployment.">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div class="app">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-content">
+                <div class="logo">
+                    <span class="logo-icon">💰</span>
+                    <h1>Financial Code Validator</h1>
+                </div>
+                <p class="tagline">We treat cloud cost as a code bug and catch it before deployment</p>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main">
+            <!-- Input Section -->
+            <section class="input-section">
+                <div class="section-header">
+                    <h2>Paste Your Code</h2>
+                    <div class="controls">
+                        <select id="language-select" class="language-select">
+                            <option value="auto">Auto-detect</option>
+                            <option value="python">Python</option>
+                            <option value="javascript">JavaScript</option>
+                            <option value="java">Java</option>
+                        </select>
+                        <button id="clear-btn" class="clear-btn">
+                            <span>🗑️</span>
+                            Clear
+                        </button>
+                        <button id="scan-btn" class="scan-btn">
+                            <span class="btn-icon">⚡</span>
+                            Analyze
+                        </button>
+                    </div>
+                </div>
+                <div class="code-input-wrapper">
+                    <textarea id="code-input" class="code-input" placeholder="Paste your Python, JavaScript, or Java code here...
+
+Python example:
+for user_id in user_ids:
+    data = dynamodb.get_item(TableName='users', Key={'id': user_id})
+
+JavaScript example:
+for (const id of userIds) {
+    const response = await fetch(`/api/users/${id}`);
+}
+
+Java example:
+for (Long id : userIds) {
+    User user = userRepository.findById(id);
+}"></textarea>
+                    <div class="line-numbers" id="line-numbers"></div>
+                </div>
+            </section>
+
+            <!-- Results Section -->
+            <section class="results-section" id="results-section" style="display: none;">
+                <div class="section-header">
+                    <h2>Cost Report</h2>
+                    <div class="scan-meta" id="scan-meta"></div>
+                </div>
+
+                <!-- Summary Card -->
+                <div class="summary-card" id="summary-card">
+                    <div class="summary-grid">
+                        <div class="summary-item">
+                            <span class="summary-label">Financial Bugs</span>
+                            <span class="summary-value" id="findings-count">0</span>
+                        </div>
+                        <div class="summary-item">
+                            <span class="summary-label">Per Execution</span>
+                            <span class="summary-value cost" id="per-execution-cost">₹0.00</span>
+                        </div>
+                        <div class="summary-item highlight">
+                            <span class="summary-label">Monthly Cost</span>
+                            <span class="summary-value cost" id="monthly-cost">₹0.00</span>
+                        </div>
+                    </div>
+                    <div class="severity-breakdown" id="severity-breakdown"></div>
+                    <div class="disclaimer" id="disclaimer"></div>
+                </div>
+
+                <!-- Findings List -->
+                <div class="findings-list" id="findings-list"></div>
+
+                <!-- No Issues Message -->
+                <div class="no-issues" id="no-issues" style="display: none;">
+                    <div class="no-issues-icon">✅</div>
+                    <h3>No Financial Bugs Detected</h3>
+                    <p>Your code looks efficient! No cost-heavy patterns found.</p>
+                </div>
+            </section>
+        </main>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <p>Financial Code Validator v1.0.0 • Runs 100% locally • Python, JavaScript, Java</p>
+            <p class="cost-note">Cost estimates: ₹0.01 per API call • ₹0.002 per DB query • 100 iterations assumed</p>
+        </footer>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+
+</html>

@@ -90,7 +90,7 @@
         scanBtn.innerHTML = '<span class="btn-icon">⟳</span> Analyzing...';
 
         try {
-            const response = await fetch('/scan', {
+            const response = await fetch('/.netlify/functions/scan', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
