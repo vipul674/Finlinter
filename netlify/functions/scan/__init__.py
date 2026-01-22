@@ -6,9 +6,9 @@ import sys
 import os
 from pathlib import Path
 
-# Add the project root to the path
-project_root = Path(__file__).parent.parent.parent.parent
-sys.path.insert(0, str(project_root))
+# Add current directory to path for bundled dependencies
+current_dir = Path(__file__).parent
+sys.path.insert(0, str(current_dir))
 
 from finlinter.core import ScannerDispatch
 from finlinter.cost import CostEstimator
