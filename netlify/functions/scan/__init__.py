@@ -4,9 +4,11 @@ Netlify serverless function for scanning code.
 import json
 import sys
 import os
+from pathlib import Path
 
 # Add the project root to the path
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', '..'))
+project_root = Path(__file__).parent.parent.parent.parent
+sys.path.insert(0, str(project_root))
 
 from finlinter.core import ScannerDispatch
 from finlinter.cost import CostEstimator
@@ -17,16 +19,32 @@ def handler(event, context):
     """
     Netlify function handler for code scanning.
     """
+    # Handle CORS preflight
+    if event.get('httpMethod') == 'OPTIONS':
+        return {
+            'statusCode': 200,
+            'headers': {
+                'Access-Control-Allow-Origin': '*',
+                'Access-Control-Allow-Headers': 'Content-Type',
+                'Access-Control-Allow-Methods': 'POST, OPTIONS'
+            },
+            'body': ''
+        }
+    
     # Only allow POST requests
-    if event['httpMethod'] != 'POST':
+    if event.get('httpMethod') != 'POST':
         return {
             'statusCode': 405,
+            'headers': {
+                'Content-Type': 'application/json',
+                'Access-Control-Allow-Origin': '*'
+            },
             'body': json.dumps({'error': 'Method not allowed'})
         }
     
     try:
         # Parse the request body
-        body = json.loads(event['body'])
+        body = json.loads(event.get('body', '{}'))
         code = body.get('code', '')
         language = body.get('language', 'auto')
         
@@ -37,7 +55,10 @@ def handler(event, context):
         if not code.strip():
             return {
                 'statusCode': 400,
-                'headers': {'Content-Type': 'application/json'},
+                'headers': {
+                    'Content-Type': 'application/json',
+                    'Access-Control-Allow-Origin': '*'
+                },
                 'body': json.dumps({
                     'success': False,
                     'error': 'No code provided'
@@ -68,7 +89,10 @@ def handler(event, context):
         
         return {
             'statusCode': 200,
-            'headers': {'Content-Type': 'application/json'},
+            'headers': {
+                'Content-Type': 'application/json',
+                'Access-Control-Allow-Origin': '*'
+            },
             'body': json.dumps({
                 'success': True,
                 'result': result.to_dict(),
@@ -77,11 +101,19 @@ def handler(event, context):
         }
         
     except Exception as e:
+        import traceback
+        error_details = traceback.format_exc()
+        print(f"Error: {error_details}")
+        
         return {
             'statusCode': 500,
-            'headers': {'Content-Type': 'application/json'},
+            'headers': {
+                'Content-Type': 'application/json',
+                'Access-Control-Allow-Origin': '*'
+            },
             'body': json.dumps({
                 'success': False,
-                'error': str(e)
+                'error': str(e),
+                'details': error_details if os.getenv('DEBUG') else None
             })
         }

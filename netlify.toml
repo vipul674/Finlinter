@@ -1,5 +1,5 @@
 [build]
-  command = "pip install -r requirements.txt && mkdir -p netlify/functions"
+  command = "pip install -r requirements.txt"
   functions = "netlify/functions"
   publish = "finlinter/web/static"
 
@@ -15,3 +15,6 @@
 
 [build.environment]
   PYTHON_VERSION = "3.11"
+  
+[functions]
+  included_files = ["finlinter/**"]
